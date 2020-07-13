@@ -1,0 +1,45 @@
+/*
+Condition 1: If the Site Dosage Rec (Math) is not blank, use that value
+Condition 2: If the student is in 11th or 12th Grade, the rec is 0
+Condition 3: If Student is in 9th or 10th grade and the term isn't summer AND
+math readiness is NOT 1. Ready, the rec is 1
+Condition 4: If the Term is Summer AND
+the student is in 9th with a 9th math readiness score that is NOT 1. Ready, OR
+the student is in 10th with a 10th math readiness score that is NOT 1. Ready, the rec is 1
+*/
+
+/*IF(
+NOT(
+ISBLANK(Site_Dosage_Rec_Math__c)),Site_Dosage_Rec_Math__c,
+IF(
+OR(
+TEXT(High_School_Grade__c)="11th Grade",
+TEXT(High_School_Grade__c)="12th Grade"),0,
+IF(
+OR(TEXT(High_School_Grade__c)="9th Grade",
+TEXT(High_School_Grade__c)="10th Grade") &&
+Term__c <> "Summer" &&
+Student__r.Readiness_9th_Math__c <> "1. Ready",1,
+IF(
+OR(TEXT(High_School_Grade__c)="9th Grade",
+TEXT(High_School_Grade__c)="10th Grade") &&
+Term__c = "Summer" &&
+Student__r.Readiness_9th_Math__c <> "1. Ready",1,0))))*/
+IF(
+AND(
+NOT(
+ISBLANK(Site_Dosage_Rec_Math__c)),
+ISPICKVAL(Dosage_Change_Approved_Math__c, "Approved")), Site_Dosage_Rec_Math__c,
+IF(
+OR(
+TEXT(High_School_Grade__c)="11th Grade",
+TEXT(High_School_Grade__c)="12th Grade"),0,
+IF(
+OR(TEXT(High_School_Grade__c)="9th Grade",
+TEXT(High_School_Grade__c)="10th Grade") &&
+Term__c <> "Summer" &&
+Student__r.Readiness_9th_Math__c <> "1. Ready",1,
+IF(Term__c = "Summer" &&
+OR(
+TEXT(High_School_Grade__c)="9th Grade" && Student__r.Readiness_9th_Math__c <> "1. Ready",
+TEXT(High_School_Grade__c)="10th Grade" && Student__r.Readiness_10th_Math__c <> "1. Ready"),1,0))))

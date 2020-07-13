@@ -1,0 +1,24 @@
+/*IF(
+NOT(ISBLANK(Site_Dosage_Rec_CC__c)),Site_Dosage_Rec_CC__c,
+IF(
+OR(
+TEXT(High_School_Grade__c)="Year 1",
+TEXT(High_School_Grade__c)="12th Grade",
+TEXT(High_School_Grade__c)="11th Grade"), 1,
+IF(
+Term__c<>"Summer" &&
+OR(TEXT(High_School_Grade__c)="10th Grade",
+TEXT(High_School_Grade__c)="9th Grade"),1, 0)))*/
+IF(
+AND(
+NOT(ISBLANK(Site_Dosage_Rec_CC__c)),
+ISPICKVAL(Dosage_Change_Approved_CC__c,"Approved")),Site_Dosage_Rec_CC__c,
+IF(
+OR(
+TEXT(High_School_Grade__c)="Year 1",
+TEXT(High_School_Grade__c)="12th Grade",
+TEXT(High_School_Grade__c)="11th Grade"), 1,
+IF(
+Term__c<>"Summer" &&
+OR(TEXT(High_School_Grade__c)="10th Grade",
+TEXT(High_School_Grade__c)="9th Grade"),1, 0)))

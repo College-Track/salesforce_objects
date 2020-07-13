@@ -1,0 +1,12 @@
+/*
+ Condition 1: If the Dosage Adjustment (Coaching) isn't blank, use that value.
+ Condition 2: Students are defaulted to 1 dosage rec
+ */
+IF(
+    AND(
+        NOT(ISBLANK(Dosage_Adjustment_Coaching__c)),
+        ISPICKVAL(Dosage_Change_Approved_Coaching__c, "Approved")
+    ),
+    Dosage_Adjustment_Coaching__c,
+    1
+)

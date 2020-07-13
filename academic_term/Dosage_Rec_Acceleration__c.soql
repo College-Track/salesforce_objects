@@ -1,0 +1,33 @@
+/* Acceleration */
+/* If the Dosage Adjustment (Acceleration) isn't blank, use that value. */
+IF(
+    AND(
+        NOT(ISBLANK(Dosage_Adjustment_Acceleration__c)),
+        ISPICKVAL(
+            Dosage_Change_Approved_Acceleration__c,
+            "Approved"
+        )
+    ),
+    Dosage_Adjustment_Acceleration__c,
+    /* If term is Summer, then 0 */
+    IF(
+        Term__c = "Summer",
+        0,
+        /* If the term if Fall, and the students previous previous term (Spring) CGPA is below 3.0 then 1, else 0 */
+        IF(
+            AND(
+                Term__c = "Fall",
+                GPA_prev_prev_semester_cumulative__c < 3
+            ),
+            1,
+            /* If the term is Spring, and the students previous term (Fall) CGPA is below 3.0 then 1, else 0 */
+            IF(
+                AND(
+                    Term__c = "Spring",
+                    GPA_prev_semester_cumulative__c < 3
+                ),
+                1,
+                0
+            )
+        )
+    )

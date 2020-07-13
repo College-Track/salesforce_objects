@@ -1,0 +1,32 @@
+/*IF(NOT(ISBLANK(Site_Dosage_Rec_Test_Pre__c)),Site_Dosage_Rec_Test_Pre__c,
+IF(Term__c="Summer",0,
+IF(TEXT(High_School_Grade__c)="11th Grade",1,
+IF(TEXT(High_School_Grade__c)="12th Grade",
+IF(Term__c="Fall",
+IF(OR(Student__r.Readiness_Math_Official__c<>"1. Ready",Student__r.Readiness_English_Official__c<>"1. Ready"),1,0))))))*/
+
+
+/*
+Condition 1: If Site Dosage Rec (Test Prep) isn't blank, use that value
+Condition 2: If the Term is Summer, the rec is 0
+Condition 3: If the student is in 11th Grade, the rec is 1
+Condition 4: If The 12th grade student's Math or English readiness scores are not 1. Ready AND they're
+in Fall Term, the rec is 1 */
+
+/*IF(
+NOT(ISBLANK(Site_Dosage_Rec_Test_Pre__c)),Site_Dosage_Rec_Test_Pre__c,
+IF(Term__c="Summer",0,
+IF(TEXT(High_School_Grade__c)="11th Grade",1,
+IF(OR(Student__r.Readiness_Math_Official__c<>"1. Ready",Student__r.Readiness_English_Official__c<>"1. Ready") &&
+TEXT(High_School_Grade__c)="12th Grade" &&
+Term__c="Fall",1,0))))*/
+IF(
+AND(
+NOT(ISBLANK(Site_Dosage_Rec_Test_Pre__c)),
+ISPICKVAL(Dosage_Change_Approved_Test_Prep__c, "Approved")),
+Site_Dosage_Rec_Test_Pre__c,
+IF(Term__c="Summer",0,
+IF(TEXT(High_School_Grade__c)="11th Grade",1,
+IF(OR(Student__r.Readiness_Math_Official__c<>"1. Ready",Student__r.Readiness_English_Official__c<>"1. Ready") &&
+TEXT(High_School_Grade__c)="12th Grade" &&
+Term__c="Fall",1,0))))

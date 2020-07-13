@@ -1,0 +1,19 @@
+/*
+Condition 1: If the Site Dosage Rec (Tutoring) isn't blank, use that value.
+Condition 2: If the term is Summer, 0
+Condition 3: If the student is in 9th grade, assign 2*/
+
+/*IF(NOT(ISBLANK(Site_Dosage_Rec_Tutoring__c)),Site_Dosage_Rec_Tutoring__c,
+IF(
+OR(Term__c="Summer",
+DEP_GPA_Prev_semester__c >=3.5),0,
+IF(TEXT(High_School_Grade__c)="9th Grade",2,
+IF(DEP_GPA_Prev_semester__c>=3,1,2))))*/
+IF(
+AND(
+NOT(ISBLANK(Site_Dosage_Rec_Tutoring__c)),
+ISPICKVAL(Dosage_Change_Approved_Tutoring__c, "Approved")),Site_Dosage_Rec_Tutoring__c,
+IF(Term__c="Summer",0,
+IF(TEXT(High_School_Grade__c)="9th Grade",2,
+IF(DEP_GPA_Prev_semester__c >=3.5,0,
+IF(DEP_GPA_Prev_semester__c>=3,1,2)))))
