@@ -1,24 +1,26 @@
-/*IF(
-NOT(ISBLANK(Site_Dosage_Rec_CC__c)),Site_Dosage_Rec_CC__c,
+/*https://github.com/College-Track/salesforce_objects/tree/master/academic_term*/
+
+/* If a site has modified the dosage requirement, and it is approved take the modified value */
 IF(
-OR(
-TEXT(High_School_Grade__c)="Year 1",
-TEXT(High_School_Grade__c)="12th Grade",
-TEXT(High_School_Grade__c)="11th Grade"), 1,
-IF(
-Term__c<>"Summer" &&
-OR(TEXT(High_School_Grade__c)="10th Grade",
-TEXT(High_School_Grade__c)="9th Grade"),1, 0)))*/
-IF(
-AND(
-NOT(ISBLANK(Site_Dosage_Rec_CC__c)),
-ISPICKVAL(Dosage_Change_Approved_CC__c,"Approved")),Site_Dosage_Rec_CC__c,
-IF(
-OR(
-TEXT(High_School_Grade__c)="Year 1",
-TEXT(High_School_Grade__c)="12th Grade",
-TEXT(High_School_Grade__c)="11th Grade"), 1,
-IF(
-Term__c<>"Summer" &&
-OR(TEXT(High_School_Grade__c)="10th Grade",
-TEXT(High_School_Grade__c)="9th Grade"),1, 0)))
+    AND(
+        NOT(ISBLANK(Site_Dosage_Rec_CC__c)),
+        ISPICKVAL(Dosage_Change_Approved_CC__c, "Approved")
+    ),
+    Site_Dosage_Rec_CC__c,
+    /* If the student is a 12th grader they need 1 CC dosage */
+    IF(
+        TEXT(High_School_Grade__c) = "12th Grade",
+        1,
+        /* If it is the Spring term, and the student is an 11th grader they need 1 CC dosage */
+        IF(
+            Term__c = "Spring" && TEXT(High_School_Grade__c) = "11th Grade",
+            1,
+            /* If the student is a rising college student they need 1 CC dosage */
+            IF(
+                Term__c = "Summer" && TEXT(High_School_Grade__c) = "Year 1",
+                1,
+                0
+            )
+        )
+    )
+)

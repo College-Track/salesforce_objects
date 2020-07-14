@@ -1,19 +1,19 @@
-/*
-Condition 1: If the Site Dosage Rec (SL) Field is not blank. use that value.
-Condition 2: If the Term is Summer OR if the Student is in 12th Grade, rec is 0.
-Otherwise the SL rec is 1*/
+/*https://github.com/College-Track/salesforce_objects/tree/master/academic_term*/
 
-/*IF(
-NOT(ISBLANK(Site_Dosage_Rec_SL__c)), Site_Dosage_Rec_SL__c,
+/* If a site has modified the dosage requirement, and it is approved take the modified value */
 IF(
-OR(
-Term__c = "Summer",
-TEXT(High_School_Grade__c) = "12th Grade"),0,1))*/
-IF(
-AND(
-NOT(ISBLANK(Site_Dosage_Rec_SL__c)),
-ISPICKVAL( Dosage_Change_Approved_SL__c, "Approved")),Site_Dosage_Rec_SL__c,
-IF(
-OR(
-Term__c = "Summer",
-TEXT(High_School_Grade__c) = "12th Grade"),0,1))
+    AND(
+        NOT(ISBLANK(Site_Dosage_Rec_SL__c)),
+        ISPICKVAL(Dosage_Change_Approved_SL__c, "Approved")
+    ),
+    Site_Dosage_Rec_SL__c,
+    /* If the term is summer, or the student is a 12th grader, then 0. Else 1 for all students */
+    IF(
+        OR(
+            Term__c = "Summer",
+            TEXT(High_School_Grade__c) = "12th Grade"
+        ),
+        0,
+        1
+    )
+)

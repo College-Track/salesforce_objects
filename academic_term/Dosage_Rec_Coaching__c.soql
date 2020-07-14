@@ -1,3 +1,4 @@
+/*https://github.com/College-Track/salesforce_objects/tree/master/academic_term*/
 /*
  Condition 1: If the Dosage Adjustment (Coaching) isn't blank, use that value.
  Condition 2: Students are defaulted to 1 dosage rec
