@@ -1,5 +1,4 @@
 /*https://github.com/College-Track/salesforce_objects/tree/master/academic_term*/
-
 /* If a site has modified the dosage requirement, and it is approved take the modified value */
 IF(
     AND(
@@ -7,10 +6,17 @@ IF(
         ISPICKVAL(Dosage_Change_Approved_Test_Prep__c, "Approved")
     ),
     Site_Dosage_Rec_Test_Pre__c,
-    /* If the term is summer, then 0 dosage rec. */
+    /* If the term is summer, the student is 11th grade and the student isn't ready then 1, else 0 dosage rec. */
     IF(
         Term__c = "Summer",
-        0,
+        IF(
+            AND(
+                Student__r.Grade__c = "11th Grade",
+                Student__r.Readiness_Composite_Off__c != '1. Ready'
+            ),
+            1,
+            0
+        ),
         /* If the student is an 11th grader, then 1 dosage rec. Else 0 for all other students. */
         IF(
             TEXT(High_School_Grade__c) = "11th Grade",
