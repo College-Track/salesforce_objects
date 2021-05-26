@@ -1,4 +1,3 @@
-/*https://github.com/College-Track/salesforce_objects/tree/master/academic_term*/
 /*
  Condition 1: If the Dosage Adjustment (Coaching) isn't blank, use that value.
  Condition 2: Students are defaulted to 1 dosage rec
@@ -9,5 +8,6 @@ IF(
         ISPICKVAL(Dosage_Change_Approved_Coaching__c, "Approved")
     ),
     Dosage_Adjustment_Coaching__c,
-    1
+    /* If the term is summer, then 0. Else 1 for all students */
+    IF(Term__c = "Summer", 0, 1)
 )
